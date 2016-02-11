@@ -10,8 +10,12 @@ namespace App;
 class ReconciliationUtils 
 {
 
+    // In Minutes the interval within which two transaction dates are considered similar
     const MAX_DIFFERENCE_TRANSACTION_DATE = 60;
+    // The minimum score that the weighted average of the criteria has to match to be considered a valid suggestion
     const MINIMUM_CONFIDENCE_SCORE = 50;
+
+    //TODO ; If a match scores higher than this number , maybe consider it an exact match
     const EXACT_MATCH_CONFIDENCE_SCORE = 90;
 
     //List of weight per transaction criteria to evaluate transaction similarity
