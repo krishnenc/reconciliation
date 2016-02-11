@@ -125,7 +125,12 @@ class ReconciliationUtils
                 $nonMatchTransDate = strtotime($nonMatchedTransaction['TransactionDate']);
                 $otherFileTransDate = strtotime($file2[$i]['TransactionDate']);
                 $interval = round(abs($nonMatchTransDate - $otherFileTransDate) / 60);
-                $transactionDateInterval = ((self::MAX_DIFFERENCE_TRANSACTION_DATE - $interval) / self::MAX_DIFFERENCE_TRANSACTION_DATE) * 100;
+
+                if ($interval < self::MAX_DIFFERENCE_TRANSACTION_DATE)
+                    $transactionDateInterval = ((self::MAX_DIFFERENCE_TRANSACTION_DATE - $interval) / self::MAX_DIFFERENCE_TRANSACTION_DATE) * 100;
+                else
+                    $transactionDateInterval = 0;    
+                
 
                 //Check if we can match the amount exactly
                 $transactionAmount = 0;
@@ -141,11 +146,12 @@ class ReconciliationUtils
                                 + ($transactionIdWeight * self::TRANSACTION_ID_WEIGHT)
                                 + ($transactionNarrative * self::TRANSACTION_NARRATIVE_WEIGHT);
 
+
                 if ($weightAvg > self::MINIMUM_CONFIDENCE_SCORE){
-                    //The transaction can be considered
+                   //The transaction can be considered as a suggestion
                     $file2[$i]['SCORE'] = $weightAvg.'%';
                     $nonMatchedTransaction['SUGGESTIONS'][] = $file2[$i];
-                }
+                 }
             }
         }
         return $nonMatchedTransaction;
