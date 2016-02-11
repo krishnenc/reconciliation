@@ -7,11 +7,18 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\ReconciliationUtils;
 
+/*
+    Class: ReconciliationController
+
+    Handles requesta coming from the reconcialition screen
+*/
 class ReconciliationController extends Controller
 {
+
+
     public function index(Request $request) {
     	$result = is_null($request->input('results')) ? false : true;
-    	$data['MAX_DIFFERENCE_TRANSACTION_DATE'] = ReconciliationUtils::MAX_DIFFERENCE_TRANSACTION_DATE;
+    	$data = array();
     	//var_dump($request->input('results'));
     	if ($request->input('results') == NULL)
     		$data['RESULTS'] = 0;
@@ -42,6 +49,8 @@ class ReconciliationController extends Controller
     	$file1Path = $uploadPath.'/'.$file1Name;
     	$file2Path = $uploadPath.'/'.$file2Name;
 
+        $request->session()->flush();
+        
     	$compareFile1ToFile2Result = ReconciliationUtils::compareFile($file1Path,$file2Path);
     	$compareFile1ToFile2Result['FILE1_NAME'] = $file1Name;
     	$request->session()->put('FILE1_DATA', $compareFile1ToFile2Result);

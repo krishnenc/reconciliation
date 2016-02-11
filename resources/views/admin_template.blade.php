@@ -67,7 +67,7 @@
                 Anything you want
             </div>
             <!-- Default to the left -->
-            <strong>Copyright © 2015 <a href="#">Company</a>.</strong> All rights reserved.
+            <strong>Copyright © 2016 <a href="#">Company</a>.</strong> All rights reserved.
         </footer>
 
     </div><!-- ./wrapper -->

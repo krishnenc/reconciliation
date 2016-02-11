@@ -31,6 +31,11 @@ Route::get('admin', function () {
 */
 
 Route::group(['middleware' => ['web']], function () {
+
+	Route::get('/', [
+    'as' => 'home', 'uses' => 'ReconciliationController@index'
+	]);
+
     Route::get('reconciliation', [
     'as' => 'reconciliation', 'uses' => 'ReconciliationController@index'
 	]);
