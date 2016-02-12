@@ -10,11 +10,10 @@ use App\ReconciliationUtils;
 /*
     Class: ReconciliationController
 
-    Handles requesta coming from the reconcialition screen
+    Handles requests coming from the reconciliation screen
 */
 class ReconciliationController extends Controller
 {
-
 
     public function index(Request $request) {
     	$result = is_null($request->input('results')) ? false : true;
