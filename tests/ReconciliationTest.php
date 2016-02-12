@@ -14,7 +14,7 @@ class ReconciliationTest extends TestCase
      */
     public function testExactMatch()
     {
-        $uploadPath = public_path().'/Uploads';
+        $uploadPath = public_path().'/uploads';
         ReconciliationUtils::$maxdiffdate = 60;
         ReconciliationUtils::$minconfidencescore = 50;
         ReconciliationUtils::$amountweight = 0.4;
@@ -33,7 +33,7 @@ class ReconciliationTest extends TestCase
      */
     public function testFindSuggestion()
     {
-        $uploadPath = public_path().'/Uploads';
+        $uploadPath = public_path().'/uploads';
         ReconciliationUtils::$maxdiffdate = 60;
         ReconciliationUtils::$minconfidencescore = 50;
         ReconciliationUtils::$amountweight = 0.4;
@@ -52,7 +52,7 @@ class ReconciliationTest extends TestCase
      */
     public function testCannotFindSuggestion()
     {
-        $uploadPath = public_path().'/Uploads';
+        $uploadPath = public_path().'/uploads';
         ReconciliationUtils::$maxdiffdate = 60;
         ReconciliationUtils::$minconfidencescore = 50;
         ReconciliationUtils::$amountweight = 0.4;

@@ -63,7 +63,7 @@ class ReconciliationController extends Controller
 	    ]);
     	
 		$file1Name = $request->file('file1')->getClientOriginalName();
-		$uploadPath = public_path().'/Uploads';
+		$uploadPath = public_path().'/uploads';
 		$request->file('file1')->move($uploadPath,$file1Name);
 	
 		$file2Name = $request->file('file2')->getClientOriginalName();
