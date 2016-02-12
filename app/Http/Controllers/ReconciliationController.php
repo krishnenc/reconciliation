@@ -22,7 +22,6 @@ class ReconciliationController extends Controller
     public function index(Request $request) {
     	$result = is_null($request->input('results')) ? false : true;
     	$data = array();
-    	//var_dump($request->input('results'));
     	if ($request->input('results') == NULL)
     		$data['RESULTS'] = 0;
     	else 
@@ -32,6 +31,16 @@ class ReconciliationController extends Controller
          	$data['FILE1_DATA'] = $request->session()->get('FILE1_DATA');
          	$data['FILE2_DATA'] = $request->session()->get('FILE2_DATA');
     	}
+        $data['MINIMUM_CONFIDENCE_SCORE'] = ReconciliationUtils::MINIMUM_CONFIDENCE_SCORE;
+        $data['MAX_DIFFERENCE_TRANSACTION_DATE'] = ReconciliationUtils::MAX_DIFFERENCE_TRANSACTION_DATE;
+
+        //Weight of comparison criteria
+        $data['TRANSACTION_AMOUNT_WEIGHT'] = ReconciliationUtils::TRANSACTION_AMOUNT_WEIGHT;
+        $data['TRANSACTION_WALLET_REFERENCE_WEIGHT'] = ReconciliationUtils::TRANSACTION_WALLET_REFERENCE_WEIGHT;
+        $data['TRANSACTION_DATE_WEIGHT'] = ReconciliationUtils::TRANSACTION_DATE_WEIGHT;
+        $data['TRANSACTION_NARRATIVE_WEIGHT'] = ReconciliationUtils::TRANSACTION_NARRATIVE_WEIGHT;
+         $data['TRANSACTION_ID_WEIGHT'] = ReconciliationUtils::TRANSACTION_ID_WEIGHT;
+
     	return view('reconciliation', compact('data'));
     }
 
@@ -44,10 +53,17 @@ class ReconciliationController extends Controller
     	$this->validate($request, [
         	'file1' => 'required',
 	        'file2' => 'required',
+            'confidencemin' => 'required|max:50|numeric|min:10',
+            'maxdifftransdate' => 'required|numeric|max:300|min:10',
+            'transamountweight' => 'required|numeric|max:1|min:0',
+            'transdateweight' => 'required|numeric|max:1|min:0',
+            'transnarrativeweight' => 'required|numeric|max:1|min:0',
+            'transwalletrefweight' => 'required|numeric|max:1|min:0',
+            'transidweight' => 'required|numeric|max:1|min:0'
 	    ]);
     	
 		$file1Name = $request->file('file1')->getClientOriginalName();
-		$uploadPath = public_path().'\Uploads';
+		$uploadPath = public_path().'/Uploads';
 		$request->file('file1')->move($uploadPath,$file1Name);
 	
 		$file2Name = $request->file('file2')->getClientOriginalName();
@@ -57,6 +73,15 @@ class ReconciliationController extends Controller
     	$file2Path = $uploadPath.'/'.$file2Name;
 
         $request->session()->flush();
+
+        //Init the weight of each criteria
+        ReconciliationUtils::$maxdiffdate = $request->input('maxdifftransdate');
+        ReconciliationUtils::$minconfidencescore = $request->input('confidencemin');;
+        ReconciliationUtils::$amountweight = $request->input('transamountweight');;
+        ReconciliationUtils::$walletrefweight = $request->input('transwalletrefweight');;
+        ReconciliationUtils::$dateweight = $request->input('transdateweight');;
+        ReconciliationUtils::$idweight = $request->input('transidweight');;
+        ReconciliationUtils::$narrativeweight = $request->input('transnarrativeweight');;
         
     	$compareFile1ToFile2Result = ReconciliationUtils::compareFile($file1Path,$file2Path);
     	$compareFile1ToFile2Result['FILE1_NAME'] = $file1Name;

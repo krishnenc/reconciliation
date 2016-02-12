@@ -24,6 +24,18 @@ class ReconciliationUtils
     const TRANSACTION_DATE_WEIGHT = 0.15;
     const TRANSACTION_NARRATIVE_WEIGHT = 0.1;
     const TRANSACTION_ID_WEIGHT = 0.05;
+
+    public static $maxdiffdate;
+    public static $minconfidencescore;
+    public static $amountweight;
+    public static $walletrefweight;
+    public static $dateweight;
+    public static $idweight;
+    public static $narrativeweight;
+
+    public static function test(){
+        return 1;
+    }
     
     /**
      * Compares two CSV files and determines for the transactions
@@ -130,8 +142,8 @@ class ReconciliationUtils
                 $otherFileTransDate = strtotime($file2[$i]['TransactionDate']);
                 $interval = round(abs($nonMatchTransDate - $otherFileTransDate) / 60);
 
-                if ($interval < self::MAX_DIFFERENCE_TRANSACTION_DATE)
-                    $transactionDateInterval = ((self::MAX_DIFFERENCE_TRANSACTION_DATE - $interval) / self::MAX_DIFFERENCE_TRANSACTION_DATE) * 100;
+                if ($interval < self::$maxdiffdate)
+                    $transactionDateInterval = ((self::$maxdiffdate - $interval) / self::$maxdiffdate) * 100;
                 else
                     $transactionDateInterval = 0;    
                 
@@ -142,16 +154,17 @@ class ReconciliationUtils
                     $transactionAmount = 100;
                 }
 
+
                 //Calculate the weighted average of the different criteria score/weight calculated above
                 //Only scores higher than the MINIMUM_CONFIDENCE_SCORE will be considered to be valid as a suggestion
-                $weightAvg = ($transactionAmount * self::TRANSACTION_AMOUNT_WEIGHT) 
-                                + ($transactionDateInterval * self::TRANSACTION_DATE_WEIGHT)
-                                + ($walletRefWeight * self::TRANSACTION_WALLET_REFERENCE_WEIGHT)
-                                + ($transactionIdWeight * self::TRANSACTION_ID_WEIGHT)
-                                + ($transactionNarrative * self::TRANSACTION_NARRATIVE_WEIGHT);
+                $weightAvg = ($transactionAmount * self::$amountweight) 
+                                + ($transactionDateInterval * self::$dateweight)
+                                + ($walletRefWeight * self::$walletrefweight)
+                                + ($transactionIdWeight * self::$idweight)
+                                + ($transactionNarrative * self::$narrativeweight);
 
 
-                if ($weightAvg > self::MINIMUM_CONFIDENCE_SCORE){
+                if ($weightAvg > self::$minconfidencescore){
                    //The transaction can be considered as a suggestion
                     $file2[$i]['SCORE'] = $weightAvg.'%';
                     $nonMatchedTransaction['SUGGESTIONS'][] = $file2[$i];

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class='row'>
-        <div class='col-md-6'>
+        <div class='col-md-8'>
             <!-- Box -->
             <div class="box box-primary">
                 <div class="box-header with-border">
@@ -16,14 +16,55 @@
                             'novalidate' => 'novalidate', 
                             'files' => true)) !!}
                     <div class="form-group">
-                        {!! Form::label('Select File 1') !!}
+                        {!! Form::label('Select file 1') !!}
                         {!! Form::file('file1', null) !!}
                     </div>
                    <div class="form-group">
-                        {!! Form::label('Select File 2') !!}
+                        {!! Form::label('Select file 2') !!}
                         {!! Form::file('file2', null) !!}
                     </div>
 
+                    <div class='row'>
+                        <div class='col-md-6'>
+                            <div class="form-group">
+                                {!! Form::label('Minimum confidence score') !!}
+                                {!! Form::text('confidencemin', $data['MINIMUM_CONFIDENCE_SCORE'] ,array('data-toggle' => 'tooltip','title' => 'The minimum score that the
+                                 weighted average of the criteria has to match to be considered a valid suggestion')); !!}
+                            </div>
+                            <div class="form-group">
+                                {!! Form::label('Maximum diff transaction date (minutes)') !!}
+                                {!! Form::text('maxdifftransdate', $data['MAX_DIFFERENCE_TRANSACTION_DATE'] ,array('data-toggle' => 'tooltip',
+                                'title' => 'In minutes, the interval within which two transaction dates are considered similar')); !!}
+                            </div>
+                            <div class="form-group">
+                              {!! Form::label('Transaction wallet reference weight(0-1)') !!}
+                              {!! Form::text('transwalletrefweight', $data['TRANSACTION_WALLET_REFERENCE_WEIGHT'] ,array('data-toggle' => 'tooltip',
+                              'title' => 'Weight assigned to the transaction wallet reference')); !!}
+                            </div>
+                            <div class="form-group">
+                                {!! Form::label('Transaction id weight(0-1)') !!}
+                                {!! Form::text('transidweight', $data['TRANSACTION_ID_WEIGHT'] ,array('data-toggle' => 'tooltip',
+                                'title' => 'Weight assigned to the transaction id reference')); !!}
+                            </div>
+                        </div>
+                        <div class='col-md-4'>
+                          <div class="form-group">
+                            {!! Form::label('Transaction amount weight(0-1)') !!}
+                            {!! Form::text('transamountweight', $data['TRANSACTION_AMOUNT_WEIGHT'] ,array('data-toggle' => 'tooltip',
+                            'title' => 'Weight assigned to the transaction amount')); !!}
+                          </div>
+                          <div class="form-group">
+                              {!! Form::label('Transaction date weight(0-1)') !!}
+                              {!! Form::text('transdateweight', $data['TRANSACTION_DATE_WEIGHT'] ,array('data-toggle' => 'tooltip',
+                              'title' => 'Weight assigned to the transaction date')); !!}
+                          </div>
+                          <div class="form-group">
+                              {!! Form::label('Transaction narrative weight(0-1)') !!}
+                              {!! Form::text('transnarrativeweight', $data['TRANSACTION_NARRATIVE_WEIGHT'] ,array('data-toggle' => 'tooltip',
+                              'title' => 'Weight assigned to the transaction narrative')); !!}
+                          </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         {!! Form::submit('Compare!') !!}
                     </div>
@@ -202,6 +243,7 @@
       }
       
       $("#reports").hide();
+      $('[data-toggle="tooltip"]').tooltip(); 
 
       $("#unmatched").button().click(function(){
           fillUnmatchedTables(1);
@@ -215,6 +257,7 @@
           "columnDefs": [ {
               "targets": -1,
               "data": null,
+              "pageLength": 50,
               "defaultContent": "<button>Suggestions</button>"
             } ]
           });
