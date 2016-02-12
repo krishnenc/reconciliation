@@ -15,6 +15,10 @@ use App\ReconciliationUtils;
 class ReconciliationController extends Controller
 {
 
+    /*
+        Default view controller
+        When redirected from compare , it displays the comparison table
+    */
     public function index(Request $request) {
     	$result = is_null($request->input('results')) ? false : true;
     	$data = array();
@@ -31,6 +35,10 @@ class ReconciliationController extends Controller
     	return view('reconciliation', compact('data'));
     }
 
+    /*
+        Compares two files uploaded from the reconcialition screen
+        The comparison data is stored in the user session
+    */
     public function compare(Request $request) {
     	//required|mimes:csv
     	$this->validate($request, [
@@ -61,6 +69,10 @@ class ReconciliationController extends Controller
 		return redirect('/reconciliation?results=true')->withSuccess("Comparison done!");
     }
 
+    /*
+    *
+        Gets transactions that are unmatched for the file specified with an index
+    */
     public function unmatched(Request $request) {
         $unmatchedFileIndex = $request->input('index');
         $data = $request->session()->get('FILE'.$unmatchedFileIndex.'_DATA');
@@ -84,6 +96,9 @@ class ReconciliationController extends Controller
     	return response()->json($table);
     }
 
+    /*
+        Gets the suggestions for an unmatched transaction
+    */
     public function suggestions(Request $request) {
         $unmatchedFileIndex = $request->input('index');
         $data = $request->session()->get('FILE'.$unmatchedFileIndex.'_DATA');
