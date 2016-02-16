@@ -32,10 +32,6 @@ class ReconciliationUtils
     public static $dateweight;
     public static $idweight;
     public static $narrativeweight;
-
-    public static function test(){
-        return 1;
-    }
     
     /**
      * Compares two CSV files and determines for the transactions
